@@ -3,7 +3,10 @@ import { JWTPayload, AuthUser } from '../types/user.types';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'fallback-refresh-secret';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+
+// Define valid expiration times
+const ACCESS_TOKEN_EXPIRES = '15m';
+const REFRESH_TOKEN_EXPIRES = process.env.JWT_EXPIRES_IN || '7d';
 
 export class JWTService {
   static generateAccessToken(user: AuthUser): string {
@@ -15,7 +18,7 @@ export class JWTService {
     };
 
     return jwt.sign(payload, JWT_SECRET, {
-      expiresIn: '15m' // Short-lived access token
+      expiresIn: ACCESS_TOKEN_EXPIRES
     });
   }
 
@@ -28,7 +31,7 @@ export class JWTService {
     };
 
     return jwt.sign(payload, JWT_REFRESH_SECRET, {
-      expiresIn: JWT_EXPIRES_IN // Long-lived refresh token
+      expiresIn: REFRESH_TOKEN_EXPIRES
     });
   }
 

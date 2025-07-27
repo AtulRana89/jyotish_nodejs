@@ -1,6 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import { JWTService } from '../utils/jwt';
 import { UserService } from '../services/userService';
+import { JWTPayload } from '../types/user.types';
+
+// Extend Request interface to include jwtUser for JWT authentication
+declare global {
+  namespace Express {
+    interface Request {
+      jwtUser?: JWTPayload;
+    }
+  }
+}
 
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -32,7 +42,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
       });
     }
 
-    req.user = decoded;
+    req.jwtUser = decoded;
     next();
   } catch (error) {
     return res.status(403).json({
@@ -52,7 +62,7 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
       if (decoded) {
         const user = await UserService.findById(decoded.userId);
         if (user) {
-          req.user = decoded;
+          req.jwtUser = decoded;
         }
       }
     }

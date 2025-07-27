@@ -3,8 +3,6 @@ import { UserService } from '../services/userService';
 import { JWTService } from '../utils/jwt';
 import { generateOTP, sendEmail, userToAuthUser } from '../utils/helpers';
 import { User, JWTPayload } from '../types/user.types';
-import { isAuthenticatedRequest } from '../types/auth.types';
-
 
 export class AuthController {
   // OAuth Success Callback
@@ -111,14 +109,14 @@ export class AuthController {
   // Get Current User Profile
   static async getProfile(req: Request, res: Response) {
     try {
-      if (!isAuthenticatedRequest(req)) {
+      if (!req.jwtUser) {
         return res.status(401).json({
           success: false,
           message: 'User not authenticated'
         });
       }
 
-      const user = await UserService.findById(req.user.userId);
+      const user = await UserService.findById(req.jwtUser.userId);
       
       if (!user) {
         return res.status(404).json({

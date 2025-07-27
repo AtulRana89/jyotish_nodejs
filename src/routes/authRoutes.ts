@@ -53,7 +53,7 @@ router.get('/me', authenticateToken, (req, res) => {
   res.json({
     success: true,
     message: 'Authenticated user',
-    user: req.user
+    user: req.jwtUser
   });
 });
 
