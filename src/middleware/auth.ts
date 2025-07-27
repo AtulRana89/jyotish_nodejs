@@ -1,16 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { JWTService } from '../utils/jwt';
 import { UserService } from '../services/userService';
-import { JWTPayload } from '../types/user.types';
-
-// Extend Request interface to include user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: JWTPayload;
-    }
-  }
-}
 
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   try {

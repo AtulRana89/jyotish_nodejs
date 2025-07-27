@@ -28,7 +28,8 @@ passport.use(new GoogleStrategy({
         providerId: profile.id,
         avatar: profile.photos?.[0]?.value
       });
-      return done(null, user);
+     return done(null, user ?? undefined);
+
     }
 
     // Create new user
@@ -52,7 +53,7 @@ passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID || '',
   clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
   callbackURL: '/auth/github/callback'
-}, async (accessToken, refreshToken, profile, done) => {
+}, async (accessToken:any, refreshToken:any, profile:any, done:any) => {
   try {
     // Check if user already exists
     let user = await UserService.findByProviderId('github', profile.id);

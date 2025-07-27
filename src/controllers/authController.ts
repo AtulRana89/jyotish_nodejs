@@ -2,15 +2,17 @@ import { Request, Response } from 'express';
 import { UserService } from '../services/userService';
 import { JWTService } from '../utils/jwt';
 import { generateOTP, sendEmail, userToAuthUser } from '../utils/helpers';
-import { User } from '../types/user.types';
+import { User, JWTPayload } from '../types/user.types';
+import { isAuthenticatedRequest } from '../types/auth.types';
+
 
 export class AuthController {
   // OAuth Success Callback
   static async oauthSuccess(req: Request, res: Response) {
     try {
-      const user = req.user as User;
+      const user = req.user as any; // Passport user from OAuth
       
-      if (!user) {
+      if (!user || !user.id) {
         return res.redirect(`${process.env.CLIENT_URL}/login?error=authentication_failed`);
       }
 
@@ -71,7 +73,7 @@ export class AuthController {
 
       const decoded = JWTService.verifyRefreshToken(refreshToken);
       
-      if (!decoded) {
+      if (!decoded || !decoded.userId) {
         res.clearCookie('refreshToken');
         return res.status(403).json({
           success: false,
@@ -109,7 +111,7 @@ export class AuthController {
   // Get Current User Profile
   static async getProfile(req: Request, res: Response) {
     try {
-      if (!req.user) {
+      if (!isAuthenticatedRequest(req)) {
         return res.status(401).json({
           success: false,
           message: 'User not authenticated'

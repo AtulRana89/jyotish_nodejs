@@ -1,13 +1,13 @@
-// Routes
-app.get('/', (req: Request, res: Response) => {
-  res.json({
-    message: 'Welcome to Node.js + TypeScript API with OAuth Authentication',import express, { Application, Request, Response, NextFunction } from 'express';
+
+import express, { Application, Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import cors from 'cors';
 import passport from './config/passport';
 import authRoutes from './routes/authRoutes';
+
+
 
 // Load environment variables
 dotenv.config();
@@ -45,14 +45,29 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Basic error handling middleware
-const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'production' ? {} : err.stack
-  });
-};
 
+// Routes
+app.use('/auth', authRoutes);
+
+app.get('/', (req: Request, res: Response) => {
+  res.json({
+    message: 'Welcome to Node.js + TypeScript API with OAuth Authentication',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    availableRoutes: {
+      auth: {
+        google: '/auth/google',
+        github: '/auth/github',
+        profile: '/auth/profile',
+        refresh: '/auth/refresh',
+        logout: '/auth/logout',
+        forgotPassword: '/auth/forgot-password',
+        verifyOTP: '/auth/verify-otp',
+        resetPassword: '/auth/reset-password'
+      }
+    }
+  });
+});
 // Routes
 app.get('/', (req: Request, res: Response) => {
   res.json({
@@ -69,6 +84,15 @@ app.get('/health', (req: Request, res: Response) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Basic error handling middleware
+const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).json({
+    message: 'Something went wrong!',
+    error: process.env.NODE_ENV === 'production' ? {} : err.stack
+  });
+};
 
 // 404 handler
 app.use('*', (req: Request, res: Response) => {
