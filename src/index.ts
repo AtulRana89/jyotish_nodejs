@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import cors from 'cors';
 import connectDB from './config/database';
+import astrologerRoutes from './routes/astrologerRoutes';
+import bookingRouter from './routes/bookingsRoutes';
 
 // import passport from './config/passport';
 // import authRoutes from './routes/authRoutes';
@@ -87,6 +89,10 @@ app.use(/.*/, (req: Request, res: Response) => {
     path: req.originalUrl
   });
 });
+
+
+app.use('/api/astrologers', astrologerRoutes);
+app.use('/api/bookings', bookingRouter);
 
 // ===== Error handling middleware =====
 const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
