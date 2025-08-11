@@ -71,7 +71,7 @@ export const getAstrologers = async (req: Request, res: Response) => {
 };
 
 // ✅ Update Astrologer
-export const updateAstrologer = async (req: Request, res: Response) => {
+export const updateAstrologer = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
 
@@ -84,19 +84,19 @@ export const updateAstrologer = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, message: 'Astrologer not found' });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Astrologer updated successfully',
       data: astrologer,
     });
   } catch (error) {
     console.error('Error updating astrologer:', error);
-    res.status(500).json({ success: false, message: 'Server Error' });
+    return res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
 
 // ✅ Delete Astrologer
-export const deleteAstrologer = async (req: Request, res: Response) => {
+export const deleteAstrologer = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { id } = req.params;
 
@@ -106,12 +106,12 @@ export const deleteAstrologer = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, message: 'Astrologer not found' });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: 'Astrologer deleted successfully',
     });
   } catch (error) {
     console.error('Error deleting astrologer:', error);
-    res.status(500).json({ success: false, message: 'Server Error' });
+    return res.status(500).json({ success: false, message: 'Server Error' });
   }
 };
