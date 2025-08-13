@@ -11,7 +11,7 @@ const timeSlotSchema = new Schema({
 const astrologerSchema = new Schema<IAstrologer>({
   userId: {
     type: String,
-    required: true,
+    //required: true,
     ref: 'User'
   },
   name: {

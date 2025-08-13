@@ -4,8 +4,9 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import cors from 'cors';
 import connectDB from './config/database';
-import astrologerRoutes from './routes/astrologerRoutes';
+
 import bookingRouter from './routes/bookingsRoutes';
+import astrologerRoutes from './routes/astrologerRoutes';
 
 // import passport from './config/passport';
 // import authRoutes from './routes/authRoutes';
@@ -82,13 +83,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 // ===== 404 handler =====
 // FIX: use "(.*)" instead of "*" to avoid path-to-regexp v6 errors
-app.use(/.*/, (req: Request, res: Response) => {
 
-  res.status(404).json({
-    message: 'Route not found',
-    path: req.originalUrl
-  });
-});
 
 
 app.use('/api/astrologers', astrologerRoutes);
@@ -103,7 +98,13 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
   });
 };
 app.use(errorHandler);
+app.use(/.*/, (req: Request, res: Response) => {
 
+  res.status(404).json({
+    message: 'Route not found',
+    path: req.originalUrl
+  });
+});
 // ===== Graceful shutdown =====
 process.on('SIGTERM', () => {
   console.log('SIGTERM signal received: closing HTTP server');
