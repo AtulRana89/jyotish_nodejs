@@ -1,18 +1,18 @@
-// controllers/bookingController.js
-import Booking from "../models/bookings"
+import bookings from "../models/bookings";
 
-export const createBooking = async (req:any, res:any) => {
+
+export const createBooking = async (req: any, res: any) => {
   try {
     const {
       astrologerId,
-      serviceId,
+      serviceName,  // updated from serviceId → serviceName
       personalDetails,
       bookingDetails
     } = req.body;
 
     // Validate required fields
-    if (!astrologerId || !serviceId) {
-      return res.status(400).json({ message: "Astrologer ID and Service ID are required" });
+    if (!astrologerId || !serviceName) {
+      return res.status(400).json({ message: "Astrologer ID and Service Name are required" });
     }
 
     if (!personalDetails?.fullName || !personalDetails?.email || !personalDetails?.phoneNumber) {
@@ -24,9 +24,9 @@ export const createBooking = async (req:any, res:any) => {
     }
 
     // Create booking
-    const booking = new Booking({
+    const booking = new bookings({
       astrologerId,
-      serviceId,
+      serviceName,  // store serviceName instead of serviceId
       personalDetails,
       bookingDetails
     });

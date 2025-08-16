@@ -1,10 +1,17 @@
-// models/booking.model.js
 import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema(
   {
-    astrologerId: { type: mongoose.Schema.Types.ObjectId, ref: "Astrologer", required: true },
-    serviceId: { type: mongoose.Schema.Types.ObjectId, ref: "Service", required: true },
+    astrologerId: { 
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Astrologer", 
+      required: true 
+    },
+
+    serviceName: { 
+      type: String, 
+      required: true 
+    },
 
     personalDetails: {
       fullName: { type: String, required: true },
