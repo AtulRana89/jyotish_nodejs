@@ -7,6 +7,7 @@ import connectDB from './config/database';
 
 import bookingRouter from './routes/bookingsRoutes';
 import astrologerRoutes from './routes/astrologerRoutes';
+import timeSlotRoutes from './routes/timeSlotRoutes';
 
 // import passport from './config/passport';
 // import authRoutes from './routes/authRoutes';
@@ -87,6 +88,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 
 app.use('/api/astrologers', astrologerRoutes);
+app.use('/api/timeslot', timeSlotRoutes);
 app.use('/api/bookings', bookingRouter);
 
 // ===== Error handling middleware =====
